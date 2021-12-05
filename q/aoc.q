@@ -35,6 +35,15 @@ day_4:{[input]
   0N!"part 2: ", string (last nx)* sum w where not w in nx:ns bn;
  }
 
+day_5:{[input]
+  f:read0 hsym `$input;
+  c:"J"$"," vs/:/: " -> "vs/: f;
+  t:raze each (,\:/:)./: {(signum d) * til each 1+abs d:y-x}(.)/: cc:c where 0 in/: (-). ' c;
+  0N!"part 1: ",string count where 1<count each group raze ((count each t) #' enlist each first flip cc) +' t;
+  t:flip each {(1+max abs x)#/:(signum x) * til each 1+abs x}each (-). ' c;
+  0N!"part 2: ",string count where 1<count each group raze ((count each t) #' enlist each last flip c) +' t;
+ }
+
 "** Day 1"
 day_1["../input/day_1.txt"]
 
@@ -47,4 +56,10 @@ day_3["../input/day_3.txt"]
 "** Day 4"
 day_4["../input/day_4.txt"]
 
+"** Day 5"
+day_5["../input/day_5.txt"]
+
+"** Day 6"
+/day_6["../input/day_6.txt"]
+/day_6["test.txt"]
 \\
