@@ -44,6 +44,20 @@ day_5:{[input]
   0N!"part 2: ",string count where 1<count each group raze ((count each t) #' enlist each last flip c) +' t;
  }
 
+day_6:{[input]
+  f:"J"$"," vs raze read0 hsym `$input;
+  ff:f,\:80;
+  fc:(count ff) + .5 * sum count each raze {if[x>=y;:()]; raze t where 0 < count each t:nf,.z.s (.)/: nf:(enlist (8;y-x+1)),(8,/:(y-x+1)-7 * 1+til (y-x+1) div 7)} ./: ff;
+  0N!"part 1: ",string fc;
+  0N!"part 2: ";
+ }
+
+day_7:{[input]
+  f:"J"$"," vs raze read0 hsym `$input;
+  0N!"part 1: ",string sum abs f - med f;
+  0N!"part 2: ",string min {sum raze 1+/:til each x}each abs f -/: (floor 0.5+avg f;floor avg f);
+ }
+
 "** Day 1"
 day_1["../input/day_1.txt"]
 
@@ -61,5 +75,8 @@ day_5["../input/day_5.txt"]
 
 "** Day 6"
 /day_6["../input/day_6.txt"]
-/day_6["test.txt"]
+day_6["test.txt"]
+
+"** Day 7"
+day_7["../input/day_7.txt"]
 \\
