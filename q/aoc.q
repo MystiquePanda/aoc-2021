@@ -3,8 +3,8 @@
 
 day_1:{[input]
   f:"I"$read0 hsym `$input;
-  0N!"part 1: ", string count where 0<1_ deltas f;
-  0N!"part 2: ", string count where 0<1_ deltas 2_ 3 msum f;
+  0N!"part 1: ", string sum 0<1_ deltas f;
+  0N!"part 2: ", string sum 0<1_ deltas 2_ 3 msum f;
  }
 
 day_2:{[input]
@@ -39,9 +39,9 @@ day_5:{[input]
   f:read0 hsym `$input;
   c:"J"$"," vs/:/: " -> "vs/: f;
   t:raze each (,\:/:)./: {(signum d) * til each 1+abs d:y-x}(.)/: cc:c where 0 in/: (-). ' c;
-  0N!"part 1: ",string count where 1<count each group raze ((count each t) #' enlist each first flip cc) +' t;
+  0N!"part 1: ",string sum 1<count each group raze ((count each t) #' enlist each first flip cc) +' t;
   t:flip each {(1+max abs x)#/:(signum x) * til each 1+abs x}each (-). ' c;
-  0N!"part 2: ",string count where 1<count each group raze ((count each t) #' enlist each last flip c) +' t;
+  0N!"part 2: ",string sum 1<count each group raze ((count each t) #' enlist each last flip c) +' t;
  }
 
 day_6:{[input]
@@ -49,6 +49,7 @@ day_6:{[input]
   ff:f,\:80;
   fc:(count ff) + .5 * sum count each raze {if[x>=y;:()]; raze t where 0 < count each t:nf,.z.s (.)/: nf:(enlist (8;y-x+1)),(8,/:(y-x+1)-7 * 1+til (y-x+1) div 7)} ./: ff;
   0N!"part 1: ",string fc;
+  /sum 9<>(3 4 3 1 2){0N!y;((((count x) - count t)#6),t:(x-1) except -1),(sum 0=x)#8}[;]/1+til 256;
   0N!"part 2: ";
  }
 
@@ -58,25 +59,87 @@ day_7:{[input]
   0N!"part 2: ",string min {sum raze 1+/:til each x}each abs f -/: (floor 0.5+avg f;floor avg f);
  }
 
-"** Day 1"
-day_1["../input/day_1.txt"]
+day_8:{[input]
+  f:trim each flip "|" vs/: read0 hsym `$input;
+  cf:flip ((asc each) each) each " " vs/:/: f;
+  0N!"part 1: ",string sum (count each t:raze " " vs/: last f) in 2 3 4 7;
+  cs:{
+    c:`char $97+til 7;
+    sd:(2 3 4 7)!(1 7 4 8);
+    mt:flip (`pattern`psize)!(x 0;count each x 0);
+    mt:update miss:c except/: pattern, msize:7-psize, number: sd psize from mt;
+    mt:update number:2 from mt where 1=sum each miss in where 1=count each group exec raze miss from mt;
+    mt:update number:9 from mt where miss like where 3=count each group exec raze miss from mt where null number;
+    mt:update number:0 from mt where msize=1, (raze miss) in where 1=count each group exec raze miss from mt where null number;
+    mt:update number:6 from mt where null number, msize=1;
+    mt:update number:3 from mt where null number, 2=sum each (exec raze pattern from mt where number=1) in/: pattern;
+    mt:update number:5 from mt where null number;
+    :sum (((`$mt[`pattern])!mt[`number]) `$asc each x 1)*reverse 10 xexp til 4;
+   } each cf;
+  0N!"part 2: ",string sum cs;
+ }
+
+day_9:{[input]
+ m:"I"$/:/:read0 hsym `$input;
+ h:count m;
+ w:count first m;
+ dm:({(x-1;y)};{(x+1;y)};{(x;y+1)};{(x;y-1)});
+ 0N!"part 1: ",string sum {[x;y;m;dm] (m[x;y]+1)*m[x;y] < min m ./: dm .\: (x;y)}[;;m;dm] ./: raze (til h),/:\:til w;
+ /l:mc where {[x;y;m;dm] m[x;y] < min m ./: dm .\: (x;y)}[;;m;dm] ./: mc: raze (til h),/:\:til w;
+ /bs:{count distinct x} each {[x;y;m;dm] nc:c where 9 <> 9^m ./: c:dm .\: (x;y);$[0=count nc;nc;nc,raze .z.s[;;m {x[y 0;y 1]:9;x}[;]/nc;dm]./: nc]}[;;m;dm] ./:l;
+ /0N!"part 2: ",string 1*/3# desc bs;
+ }
+
+day_10:{[input]
+ m:`$/:/:read0 hsym `$input;
+ om:(`$/:"[<{(")!`$/:"]>})";
+ pm:(`$/:")]}>")!3 57 1197 25137;
+ mm:(`$"(")^first each {()({if[(0h<>type x) and null first z first x;:x];$[y in key z;x,y;$[(z last x) <> y;y;-1_ x]]}[;;y])/ x}[;om] each m;
+ 0N!"part 1: ",string sum pm mm where not mm in key om;
+ fpm:(`$/:")]}>")!1 2 3 4;
+ pc:tp where 0<tp:asc -1^{0{y+5*x}/y z reverse x}[;fpm;om] each {()({if[(0h<>type x) and null first z first x;:x];$[y in key z;x,y;$[(z last x) <> y;y;-1_ x]]}[;;y])/ x}[;om] each m;
+ 0N!"part 2: ",string pc floor 0.5 * count pc;
+ }
+
+"** advent of code 2021 **"
+/
+TODAY:9
+run:{eval parse (0N!"day_",x),"[\"../input/day_",x,".txt\"]"}
+
+run each string 1+til TODAY
+\
+
+0N!"** Day 1";
+0N!"Day 1 time space (ms|bytes): ", "|" sv string system "ts day_1[\"../input/day_1.txt\"]";
 
 "** Day 2"
-day_2["../input/day_2.txt"]
+0N!"Day 2 time space (ms|bytes): ", "|" sv string system "ts day_2[\"../input/day_2.txt\"]";
 
 "** Day 3"
-day_3["../input/day_3.txt"]
+0N!"Day 3 time space (ms|bytes): ", "|" sv string system "ts day_3[\"../input/day_3.txt\"]";
 
 "** Day 4"
-day_4["../input/day_4.txt"]
+0N!"Day 4 time space (ms|bytes): ", "|" sv string system "ts day_4[\"../input/day_4.txt\"]";
 
 "** Day 5"
-day_5["../input/day_5.txt"]
+0N!"Day 5 time space (ms|bytes): ", "|" sv string system "ts day_5[\"../input/day_5.txt\"]";
 
 "** Day 6"
-/day_6["../input/day_6.txt"]
-day_6["test.txt"]
+0N!"Day 6 time space (ms|bytes): ", "|" sv string system "ts day_6[\"../input/day_6.txt\"]";
+/0N!"Day 9 time space (ms|bytes): ", "|" sv string system "ts day_6[\"test.txt\"]";
 
 "** Day 7"
-day_7["../input/day_7.txt"]
+0N!"Day 7 time space (ms|bytes): ", "|" sv string system "ts day_7[\"../input/day_7.txt\"]";
+
+"** Day 8"
+0N!"Day 8 time space (ms|bytes): ", "|" sv string system "ts day_8[\"../input/day_8.txt\"]";
+
+"** Day 9"
+0N!"Day 9 time space (ms|bytes): ", "|" sv string system "ts day_9[\"../input/day_9.txt\"]";
+/0N!"Day 9 time space (ms|bytes): ", "|" sv string system "ts day_9[\"test.txt\"]";
+
+"** Day 10"
+0N!"Day 10 time space (ms|bytes): ", "|" sv string system "ts day_10[\"../input/day_10.txt\"]";
+
+
 \\
