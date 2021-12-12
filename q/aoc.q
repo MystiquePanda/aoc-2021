@@ -1,5 +1,6 @@
 \e 1
 \c 50 200
+\l santas_helpers.q
 
 day_1:{[input]
   f:"I"$read0 hsym `$input;
@@ -50,6 +51,7 @@ day_6:{[input]
   fc:(count ff) + .5 * sum count each raze {if[x>=y;:()]; raze t where 0 < count each t:nf,.z.s (.)/: nf:(enlist (8;y-x+1)),(8,/:(y-x+1)-7 * 1+til (y-x+1) div 7)} ./: ff;
   0N!"part 1: ",string fc;
   /sum 9<>(3 4 3 1 2){0N!y;((((count x) - count t)#6),t:(x-1) except -1),(sum 0=x)#8}[;]/1+til 256;
+  /(enlist 3){y;0N!((((count x) - count t)#2),t:(x-1) except -1),(sum 0=x)#3}[;]/1+til 10;
   0N!"part 2: ";
  }
 
@@ -79,15 +81,15 @@ day_8:{[input]
   0N!"part 2: ",string sum cs;
  }
 
-day_9:{[input]
- m:"I"$/:/:read0 hsym `$input;
+day_9:{[input] / #hadtouseglobal
+ `m set "I"$/:/:read0 hsym `$input;
  h:count m;
  w:count first m;
- dm:({(x-1;y)};{(x+1;y)};{(x;y+1)};{(x;y-1)});
- 0N!"part 1: ",string sum {[x;y;m;dm] (m[x;y]+1)*m[x;y] < min m ./: dm .\: (x;y)}[;;m;dm] ./: raze (til h),/:\:til w;
- /l:mc where {[x;y;m;dm] m[x;y] < min m ./: dm .\: (x;y)}[;;m;dm] ./: mc: raze (til h),/:\:til w;
- /bs:{count distinct x} each {[x;y;m;dm] nc:c where 9 <> 9^m ./: c:dm .\: (x;y);$[0=count nc;nc;nc,raze .z.s[;;m {x[y 0;y 1]:9;x}[;]/nc;dm]./: nc]}[;;m;dm] ./:l;
- /0N!"part 2: ",string 1*/3# desc bs;
+ l:{[x;y;m] m[x;y] < min m ./: .sh.nsew .\: (x;y)}[;;m] ./: mc: raze (til h),/:\:til w;
+ 0N!"part 1: ",string sum (raze 1+m)*l;
+ lp:mc where l;
+ bs:{count distinct x} each { nc:c where 9 <> 9^m ./: c:.sh.nsew .\: (x;y);$[0=count nc;nc;[`m set m {x[y 0;y 1]:9;x}/nc;nc,raze .z.s ./: nc]]} ./:lp;
+ 0N!"part 2: ",string 1*/3# desc bs;
  }
 
 day_10:{[input]
@@ -101,9 +103,28 @@ day_10:{[input]
  0N!"part 2: ",string pc floor 0.5 * count pc;
  }
 
-"** advent of code 2021 **"
+day_11:{[input] / #hadtouseglobal
+ m:"I"$/:/:read0 hsym `$input;
+ `mt set update l:m ./: flip (x;y) from flip (`x`y)!flip raze (til count m),/:\:til count first m;
+ f:{update l+1 from `mt;{fi:`x`y xkey `long$flip (`x`y`l)!flip (key sr),' value sr:count each group raze .sh.nsewd .\:/: flash:exec flip (x;y) from mt where l>9;`mt set (mt pj (fi lj 2!select from mt where l=0)) lj 2!flip (`x`y`l)!flip flash,\:0;x+count flash}/[0]};
+ 0N!"part 1: ", string sum 100 f\0;
+ /reset mt, because global
+ `mt set update l:m ./: flip (x;y) from flip (`x`y)!flip raze (til count m),/:\:til count first m;
+ s:enlist 0;
+ while[(last s)<>count mt;s,:f[]];
+ 0N!"part 2: ",string -1+count s;
+ }
+
+day_12:{[input]
+ 0N!"part 1: ";
+ 0N!"part 2: ";
+ }
+
+"*************************************************************"
+"******************** advent of code 2021 ********************"
+"*************************************************************"
 /
-TODAY:9
+TODAY:12
 run:{eval parse (0N!"day_",x),"[\"../input/day_",x,".txt\"]"}
 
 run each string 1+til TODAY
@@ -136,10 +157,15 @@ run each string 1+til TODAY
 
 "** Day 9"
 0N!"Day 9 time space (ms|bytes): ", "|" sv string system "ts day_9[\"../input/day_9.txt\"]";
-/0N!"Day 9 time space (ms|bytes): ", "|" sv string system "ts day_9[\"test.txt\"]";
 
 "** Day 10"
 0N!"Day 10 time space (ms|bytes): ", "|" sv string system "ts day_10[\"../input/day_10.txt\"]";
 
+"** Day 11"
+0N!"Day 11 time space (ms|bytes): ", "|" sv string system "ts day_11[\"../input/day_11.txt\"]";
+
+"** Day 12"
+/0N!"Day 12 time space (ms|bytes): ", "|" sv string system "ts day_12[\"../input/day_12.txt\"]";
+/0N!"Day 12 time space (ms|bytes): ", "|" sv string system "ts day_12[\"test.txt\"]";
 
 \\
