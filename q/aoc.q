@@ -158,7 +158,6 @@ day_15:{[input] / #hadtouseglobal
  }
 
 day_16:{[input]
-
   0N!"part 1: ";
   0N!"part 2: ";
  }
@@ -201,7 +200,12 @@ day_20:{[input]
  }
 
 day_21:{[input]
-  0N!"part 1: ";
+  f:raze "J"$-1#/:" " vs/:read0 hsym `$input;
+  sm:(til 10)!10,1+til 9;
+  score:{[p;s;n;sm]
+    $[sum 999<score:s+pos:sm (p+-3+9*(-1 0)+\:n*2) mod 10;(3*((0 -1)ll)+2*n)*min (score;s)ll:(>). score;.z.s[pos;score;n+1;sm]]
+  }[;0 0;1;sm];
+  0N!"part 1: ",string score f;
   0N!"part 2: ";
  }
 
@@ -210,12 +214,28 @@ day_22:{[input]
   0N!"part 2: ";
  }
 
+day_23:{[input]
+  0N!"part 1: ";
+  0N!"part 2: ";
+ }
+
+day_24:{[input]
+  0N!"part 1: ";
+  0N!"part 2: ";
+ }
+
+day_25:{[input]
+  0N!"part 1: ";
+  0N!"part 2: ";
+ }
+
+
 "*************************************************************"
 "******************** advent of code 2021 ********************"
 "*************************************************************"
 
-TODAY:22;
-SKIP:(16 17);
+TODAY:25;
+SKIP:(16 17 19 20 22 23 24 25);
 run:{
  0N!(x#"*")," Day ",sx:string x;
  $[x in SKIP;
