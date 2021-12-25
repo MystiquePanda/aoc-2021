@@ -82,90 +82,146 @@ day_8:{[input]
  }
 
 day_9:{[input] / #hadtouseglobal
- `m set "I"$/:/:read0 hsym `$input;
- h:count m;
- w:count first m;
- l:{[x;y;m] m[x;y] < min m ./: .sh.nsew .\: (x;y)}[;;m] ./: mc: raze (til h),/:\:til w;
- 0N!"part 1: ",string sum (raze 1+m)*l;
- lp:mc where l;
- bs:{count distinct x} each { nc:c where 9 <> 9^m ./: c:.sh.nsew .\: (x;y);$[0=count nc;nc;[`m set m {x[y 0;y 1]:9;x}/nc;nc,raze .z.s ./: nc]]} ./:lp;
- 0N!"part 2: ",string 1*/3# desc bs;
+  `m set "I"$/:/:read0 hsym `$input;
+  h:count m;
+  w:count first m;
+  l:{[x;y;m] m[x;y] < min m ./: .sh.nsew .\: (x;y)}[;;m] ./: mc: raze (til h),/:\:til w;
+  0N!"part 1: ",string sum (raze 1+m)*l;
+  lp:mc where l;
+  bs:{count distinct x} each { nc:c where 9 <> 9^m ./: c:.sh.nsew .\: (x;y);$[0=count nc;nc;[`m set m {x[y 0;y 1]:9;x}/nc;nc,raze .z.s ./: nc]]} ./:lp;
+  0N!"part 2: ",string 1*/3# desc bs;
  }
 
 day_10:{[input]
- m:`$/:/:read0 hsym `$input;
- om:(`$/:"[<{(")!`$/:"]>})";
- pm:(`$/:")]}>")!3 57 1197 25137;
- mm:(`$"(")^first each {()({if[(0h<>type x) and null first z first x;:x];$[y in key z;x,y;$[(z last x) <> y;y;-1_ x]]}[;;y])/ x}[;om] each m;
- 0N!"part 1: ",string sum pm mm where not mm in key om;
- fpm:(`$/:")]}>")!1 2 3 4;
- pc:tp where 0<tp:asc -1^{0{y+5*x}/y z reverse x}[;fpm;om] each {()({if[(0h<>type x) and null first z first x;:x];$[y in key z;x,y;$[(z last x) <> y;y;-1_ x]]}[;;y])/ x}[;om] each m;
- 0N!"part 2: ",string pc floor 0.5 * count pc;
+  m:`$/:/:read0 hsym `$input;
+  om:(`$/:"[<{(")!`$/:"]>})";
+  pm:(`$/:")]}>")!3 57 1197 25137;
+  mm:(`$"(")^first each {()({if[(0h<>type x) and null first z first x;:x];$[y in key z;x,y;$[(z last x) <> y;y;-1_ x]]}[;;y])/ x}[;om] each m;
+  0N!"part 1: ",string sum pm mm where not mm in key om;
+  fpm:(`$/:")]}>")!1 2 3 4;
+  pc:tp where 0<tp:asc -1^{0{y+5*x}/y z reverse x}[;fpm;om] each {()({if[(0h<>type x) and null first z first x;:x];$[y in key z;x,y;$[(z last x) <> y;y;-1_ x]]}[;;y])/ x}[;om] each m;
+  0N!"part 2: ",string pc floor 0.5 * count pc;
  }
 
 day_11:{[input] / #hadtouseglobal
- m:"I"$/:/:read0 hsym `$input;
- `mt set update l:m ./: flip (x;y) from flip (`x`y)!flip raze (til count m),/:\:til count first m;
- f:{update l+1 from `mt;{fi:`x`y xkey `long$flip (`x`y`l)!flip (key sr),' value sr:count each group raze .sh.nsewd .\:/: flash:exec flip (x;y) from mt where l>9;`mt set (mt pj (fi lj 2!select from mt where l=0)) lj 2!flip (`x`y`l)!flip flash,\:0;x+count flash}/[0]};
- 0N!"part 1: ", string sum 100 f\0;
- /reset mt, because global
- `mt set update l:m ./: flip (x;y) from flip (`x`y)!flip raze (til count m),/:\:til count first m;
- s:enlist 0;
- while[(last s)<>count mt;s,:f[]];
- 0N!"part 2: ",string -1+count s;
+  m:"I"$/:/:read0 hsym `$input;
+  `mt set update l:m ./: flip (x;y) from flip (`x`y)!flip raze (til count m),/:\:til count first m;
+  f:{update l+1 from `mt;{fi:`x`y xkey `long$flip (`x`y`l)!flip (key sr),' value sr:count each group raze .sh.nsewd .\:/: flash:exec flip (x;y) from mt where l>9;`mt set (mt pj (fi lj 2!select from mt where l=0)) lj 2!flip (`x`y`l)!flip flash,\:0;x+count flash}/[0]};
+  0N!"part 1: ", string sum 100 f\0;
+  /reset mt, because global
+  `mt set update l:m ./: flip (x;y) from flip (`x`y)!flip raze (til count m),/:\:til count first m;
+  s:enlist 0;
+  while[(last s)<>count mt;s,:f[]];
+  0N!"part 2: ",string -1+count s;
  }
 
 day_12:{[input]
- 0N!"part 1: ";
- 0N!"part 2: ";
+  f:`$"-" vs/:read0 hsym `$input;
+  m:group (!). flip p where (`first <> last flip p) and `end<>first flip p:f, reverse each f;
+  v:{$[z in y,`start;enlist z;raze z,/:/: .z.s[x;y,$[z=lower z;z;()];] each x[z] except y]}[m;();]each m[`end];
+  0N!"part 1: ",string count raze v;
+  v:{$[z in `start,sk:$[0 < count s:where 1<count each group y;y;()];enlist z;raze z,/:/: .z.s[x;y,$[z=lower z;z;()];] each x[z] except sk]}[m;();]each m[`end];
+  0N!"part 2: ",string count where `start=last each raze v;
+ }
+
+day_13:{[input]
+  f:(0;(1+f?"")) _ f:read0 hsym `$input;
+  c:flip (`x`y)!flip "J"$"," vs/: -1_ first f;
+  d:"="vs/: last each " " vs/: last f;
+  fcf:{?[x;enlist parse "<" sv y;0b;()],![x;enlist parse ">" sv y;0b;(enlist `$first y)!enlist (-;2*"J"$last y;`$first y)]};
+  0N!"part 1: ",string count select distinct x,y from c fcf/ 1#d;
+  fc:c fcf/ d;
+  0N!"part 2: ";
+  0N!/: " *"[value {(til x) in\: y}[1+max fc[`x];] each exec x by y from update x:x-min x, y:y-min y from fc];
+ }
+
+day_14:{[input]
+  f:(0;(1+f?"")) _ f:read0 hsym `$input;
+  t:first f 0;
+  r:(first flip r)!{x[0;0],x[1],x[0;1]}each r:" -> " vs/: f 1;
+  cpf:{(first i) {x,1_ y}/ 1_ i:x p:reverse 1_ (,)prior reverse y}[r;];
+  pc:count each group 10 cpf/ t;
+  {(max pc) - min pc:count each group z y/ x}[t;cpf;]each til 15;
+
+  0N!"part 1: ",string (max pc)-min pc;
+  /pc:count each group 40 cpf/ t;
+  /0N!"part 2: ",string (max pc)-min pc;
+ }
+
+day_15:{[input] / #hadtouseglobal
+  f:flip read0 hsym `$input;
+  d:count f;
+  `m set k!"J"$/:f(.)/:k:raze s,\:/: s:til d;
+  /p:{$[x~(0;0);0;(m x),/: raze .z.s each nc where not null m @/: nc:.sh.nw .\: x]}(-1+d;-1+d);
+  /0N!"part 1: ",string min sum each p;
+  0N!"part 2: ";
+ }
+
+day_16:{[input]
+
+  0N!"part 1: ";
+  0N!"part 2: ";
+ }
+
+day_17:{[input]
+  f:"J"$/:/:".." vs/: 2_/: ssr[;",";""]each 2_ " " vs first read0 hsym `$input;
+  xmin:f[0;0];
+  xmax:f[0;1];
+  ymin:f[1;0];
+  ymax:f[1;1];
+  p:where 0<sum each not null px:(xmin+til 1+xmax-xmin) inter/: rscx:sums each cx:reverse each 1+/: til each til 1+xmax;
+
+
+  (first each sx p)!(pfx p);
+  /sums last flip 10 ({(0|x-1;y-1)}.)\(6;9)
+  (first each cx p)!flip ((px p);((where each rscx in' px) p);(cx p);(sums each cx p ))
+
+  0N!"part 1: ",string sum til abs ymin;
+  0N!"part 2: ";
+ }
+
+\l day_18.q
+day_18:{[input] / #hadtouseglobal
+  f:parse each ssr[;"[]]";")"] each ssr[;"[[]";"("] each ssr[;",";" "] each read0 hsym `$input;
+
+  0N!"part 1: ",string .day_18.calculate[f];
+
+  c:c where not ((~).) each c:ef cross ef:enlist each f;
+  0N!"part 2: ",string max .day_18.calculate each c;
+ }
+
+day_19:{[input]
+  0N!"part 1: ";
+  0N!"part 2: ";
+ }
+
+day_20:{[input]
+  0N!"part 1: ";
+  0N!"part 2: ";
+ }
+
+day_21:{[input]
+  0N!"part 1: ";
+  0N!"part 2: ";
+ }
+
+day_22:{[input]
+  0N!"part 1: ";
+  0N!"part 2: ";
  }
 
 "*************************************************************"
 "******************** advent of code 2021 ********************"
 "*************************************************************"
-/
-TODAY:12
-run:{eval parse (0N!"day_",x),"[\"../input/day_",x,".txt\"]"}
 
-run each string 1+til TODAY
-\
+TODAY:22;
+SKIP:(16 17);
+run:{
+ 0N!(x#"*")," Day ",sx:string x;
+ $[x in SKIP;
+   0N!"UNDER CONSTRUCTION!!";
+   eval parse raze "0N!\"Day ",sx," time space (ms|bytes): \", \"|\" sv string system \"ts day_",sx,"[\\\"../input/day_",sx,".txt\\\"]\""];
+ }
 
-0N!"** Day 1";
-0N!"Day 1 time space (ms|bytes): ", "|" sv string system "ts day_1[\"../input/day_1.txt\"]";
-
-"** Day 2"
-0N!"Day 2 time space (ms|bytes): ", "|" sv string system "ts day_2[\"../input/day_2.txt\"]";
-
-"** Day 3"
-0N!"Day 3 time space (ms|bytes): ", "|" sv string system "ts day_3[\"../input/day_3.txt\"]";
-
-"** Day 4"
-0N!"Day 4 time space (ms|bytes): ", "|" sv string system "ts day_4[\"../input/day_4.txt\"]";
-
-"** Day 5"
-0N!"Day 5 time space (ms|bytes): ", "|" sv string system "ts day_5[\"../input/day_5.txt\"]";
-
-"** Day 6"
-0N!"Day 6 time space (ms|bytes): ", "|" sv string system "ts day_6[\"../input/day_6.txt\"]";
-/0N!"Day 9 time space (ms|bytes): ", "|" sv string system "ts day_6[\"test.txt\"]";
-
-"** Day 7"
-0N!"Day 7 time space (ms|bytes): ", "|" sv string system "ts day_7[\"../input/day_7.txt\"]";
-
-"** Day 8"
-0N!"Day 8 time space (ms|bytes): ", "|" sv string system "ts day_8[\"../input/day_8.txt\"]";
-
-"** Day 9"
-0N!"Day 9 time space (ms|bytes): ", "|" sv string system "ts day_9[\"../input/day_9.txt\"]";
-
-"** Day 10"
-0N!"Day 10 time space (ms|bytes): ", "|" sv string system "ts day_10[\"../input/day_10.txt\"]";
-
-"** Day 11"
-0N!"Day 11 time space (ms|bytes): ", "|" sv string system "ts day_11[\"../input/day_11.txt\"]";
-
-"** Day 12"
-/0N!"Day 12 time space (ms|bytes): ", "|" sv string system "ts day_12[\"../input/day_12.txt\"]";
-/0N!"Day 12 time space (ms|bytes): ", "|" sv string system "ts day_12[\"test.txt\"]";
-
+run each 1+til TODAY;
 \\
